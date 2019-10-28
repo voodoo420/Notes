@@ -1,8 +1,8 @@
 package ru.geekbrains.gb_kotlin.ui.main
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import ru.geekbrains.gb_kotlin.data.NotesRepository
 
 class MainViewModel : ViewModel() {
@@ -10,7 +10,7 @@ class MainViewModel : ViewModel() {
     private val viewStateLiveData: MutableLiveData<MainViewState> = MutableLiveData()
 
     init {
-        viewStateLiveData.value = MainViewState(NotesRepository.getNotes())
+        viewStateLiveData.value = MainViewState(NotesRepository.notes)
     }
 
     fun viewState(): LiveData<MainViewState> = viewStateLiveData
