@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">gb_kotlin</string>
+    <string name="new_note">New note</string>
 </resources>
