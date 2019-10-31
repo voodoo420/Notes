@@ -4,7 +4,7 @@ import ru.geekbrains.gb_kotlin.data.entity.Note
 
 object NotesRepository {
 
-    private val notes = listOf(
+    val notes = listOf(
         Note(
             "Первая заметка",
             "Текст первой заметки. Не очень длинный, но очень интересный",
@@ -36,8 +36,4 @@ object NotesRepository {
             0xffffeb3b.toInt()
         )
     )
-
-    fun getNotes(): List<Note> {
-        return notes
-    }
 }
