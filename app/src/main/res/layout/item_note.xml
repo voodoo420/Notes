@@ -26,6 +26,13 @@
             android:layout_margin="8dp"
             tools:text="My very important note text with very important information"/>
 
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            tools:text="My very important note text with very important information"/>
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
