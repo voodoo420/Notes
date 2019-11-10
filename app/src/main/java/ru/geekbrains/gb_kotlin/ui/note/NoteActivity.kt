@@ -6,36 +6,48 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_note.*
 import ru.geekbrains.gb_kotlin.R
 import ru.geekbrains.gb_kotlin.data.entity.Note
+import ru.geekbrains.gb_kotlin.ui.base.BaseActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
-class NoteActivity: AppCompatActivity() {
+class NoteActivity: BaseActivity<Note?, NoteViewState>() {
 
     companion object{
+
         private val EXTRA_NOTE = NoteActivity::class.java.name + "extra.note"
         private const val DATE_FORMAT = "dd.MM.yy HH:mm"
-        fun start(context: Context, note: Note? = null){
-            val intent = Intent(context, NoteActivity::class.java)
-            intent.putExtra(EXTRA_NOTE, note)
-            context.startActivity(intent)
-        }
+        fun start(context: Context, noteId: String? = null) = Intent(context, NoteActivity::class.java)
+            .run {putExtra(EXTRA_NOTE, noteId)
+                context.startActivity(this)
+            }
     }
-
     private var note: Note? = null
-    private lateinit var viewModel: NoteViewModel
 
+
+    override val layoutRes = R.layout.activity_note
+
+    override val viewModel: NoteViewModel by lazy {
+        ViewModelProviders.of(this).get(NoteViewModel::class.java)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_note)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        note = intent.getParcelableExtra(EXTRA_NOTE)
-        viewModel = ViewModelProviders.of(this).get(NoteViewModel::class.java)
+
+        val noteId = intent.getStringExtra(EXTRA_NOTE)
+
+        noteId?.let { viewModel.loadNote(it) } ?: let { supportActionBar?.title = getString(R.string.new_note) }
+
+        initView()
+    }
+
+    override fun renderData(data: Note?) {
+        this.note = data
 
         supportActionBar?.title = if(note != null){
             SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(note!!.lastChanged)
