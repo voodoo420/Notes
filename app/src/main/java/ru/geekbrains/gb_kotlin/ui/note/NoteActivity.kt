@@ -9,15 +9,15 @@ import android.view.MenuItem
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_note.*
 import ru.geekbrains.gb_kotlin.R
+import ru.geekbrains.gb_kotlin.common.format
+import ru.geekbrains.gb_kotlin.common.getColorInt
 import ru.geekbrains.gb_kotlin.data.entity.Note
 import ru.geekbrains.gb_kotlin.ui.base.BaseActivity
-import java.text.SimpleDateFormat
 import java.util.*
 
 class NoteActivity: BaseActivity<Note?, NoteViewState>() {
 
     companion object{
-
         private val EXTRA_NOTE = NoteActivity::class.java.name + "extra.note"
         private const val DATE_FORMAT = "dd.MM.yy HH:mm"
         fun start(context: Context, noteId: String? = null) = Intent(context, NoteActivity::class.java)
@@ -25,8 +25,8 @@ class NoteActivity: BaseActivity<Note?, NoteViewState>() {
                 context.startActivity(this)
             }
     }
-    private var note: Note? = null
 
+    private var note: Note? = null
 
     override val layoutRes = R.layout.activity_note
 
@@ -49,11 +49,10 @@ class NoteActivity: BaseActivity<Note?, NoteViewState>() {
     override fun renderData(data: Note?) {
         this.note = data
 
-        supportActionBar?.title = if(note != null){
-            SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(note!!.lastChanged)
-        }else{
-            getString(R.string.new_note)
-        }
+        supportActionBar?.title = note?.run {
+            note?.lastChanged?.format(DATE_FORMAT)
+        }?: getString(R.string.new_note)
+
         initView()
     }
 
@@ -61,19 +60,12 @@ class NoteActivity: BaseActivity<Note?, NoteViewState>() {
         et_title.removeTextChangedListener(textChangeListener)
         et_body.removeTextChangedListener(textChangeListener)
 
-        if (note != null) {
-            et_title.setText(note?.title ?: "")
-            et_body.setText(note?.text ?: "")
-            val color = when (note!!.color) {
-                Note.Color.WHITE -> R.color.white
-                Note.Color.YELLOW -> R.color.yellow
-                Note.Color.GREEN -> R.color.green
-                Note.Color.BLUE -> R.color.blue
-                Note.Color.RED -> R.color.red
-                Note.Color.VIOLET -> R.color.violet
-            }
-            toolbar.setBackgroundColor(resources.getColor(color))
+        note?.let { note ->
+             et_title.setText(note.title)
+            et_body.setText(note.text)
+            toolbar.setBackgroundColor(note.color.getColorInt(this))
         }
+
         et_body.addTextChangedListener(textChangeListener)
         et_title.addTextChangedListener(textChangeListener)
 

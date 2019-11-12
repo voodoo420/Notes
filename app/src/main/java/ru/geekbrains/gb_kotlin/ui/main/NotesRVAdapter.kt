@@ -7,9 +7,8 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.item_note.view.*
 import ru.geekbrains.gb_kotlin.R
+import ru.geekbrains.gb_kotlin.common.format
 import ru.geekbrains.gb_kotlin.data.entity.Note
-import java.text.SimpleDateFormat
-import java.util.*
 
 class NotesRVAdapter(val onItemClick: ((Note) -> Unit)? = null) : RecyclerView.Adapter<NotesRVAdapter.ViewHolder>() {
 
@@ -37,7 +36,7 @@ class NotesRVAdapter(val onItemClick: ((Note) -> Unit)? = null) : RecyclerView.A
                 Note.Color.VIOLET -> R.color.violet
 
             }
-            tv_date.text = SimpleDateFormat("dd.MM.yy HH:mm", Locale.getDefault()).format(note.lastChanged)
+            tv_date.text = note?.lastChanged?.format("dd.MM.yy HH:mm")
             setBackgroundColor(ContextCompat.getColor(itemView.context, color))
             itemView.setOnClickListener{
                 onItemClick?.invoke(note)
