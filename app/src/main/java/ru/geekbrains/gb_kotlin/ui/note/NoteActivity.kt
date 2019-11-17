@@ -73,10 +73,12 @@ class NoteActivity: BaseActivity<NoteViewState.Data, NoteViewState>() {
     private fun initView() {
         et_title.removeTextChangedListener(textChangeListener)
         et_body.removeTextChangedListener(textChangeListener)
-
+        
         note?.let { note ->
             et_title.setText(note.title)
+            et_title.setSelection(et_title.length())
             et_body.setText(note.text)
+            et_body.setSelection(et_body.length())
             toolbar.setBackgroundColor(note.color.getColorInt(this))
             supportActionBar?.title = note.run {
                 lastChanged.format(DATE_FORMAT)
