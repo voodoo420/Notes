@@ -10,16 +10,14 @@ import ru.geekbrains.gb_kotlin.data.errors.NoAuthException
 import ru.geekbrains.gb_kotlin.data.model.NoteResult
 import timber.log.Timber
 
-class FireStoreProvider: RemoteDataProvider {
+class FireStoreProvider(private val firebaseAuth: FirebaseAuth, private val store: FirebaseFirestore): RemoteDataProvider {
     companion object{
         private const val NOTE_COLLECTION = "notes"
         private const val USERS_COLLECTION = "users"
     }
 
-    private val store by lazy { FirebaseFirestore.getInstance() }
-
     private val currentUser
-        get() = FirebaseAuth.getInstance().currentUser
+        get() = firebaseAuth.currentUser
 
     override fun getCurrentUser() = MutableLiveData<User?>().apply {
         value = currentUser?.let {
@@ -71,4 +69,19 @@ class FireStoreProvider: RemoteDataProvider {
             value = NoteResult.Error(e)
         }
     }
+
+    override fun deleteNote(noteId: String) = MutableLiveData<NoteResult>().apply {
+        try {
+            getUserNotesCollection().document(noteId)
+                .delete()
+                .addOnSuccessListener { snapshot ->
+                    value = NoteResult.Success(null)
+                }.addOnFailureListener {
+                    value = NoteResult.Error(it)
+                }
+        } catch (e: Throwable) {
+            value = NoteResult.Error(e)
+        }
+    }
+
 }

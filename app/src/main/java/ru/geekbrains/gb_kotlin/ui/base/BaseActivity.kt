@@ -17,13 +17,13 @@ abstract class BaseActivity<T, S : BaseViewState<T>> : AppCompatActivity(){
         private const val RC_SING_IN = 42
     }
 
-    abstract val viewModel: BaseViewModel<T, S>
+    abstract val model: BaseViewModel<T, S>
     abstract val layoutRes: Int?
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         layoutRes?.let { setContentView(it) }
-        viewModel.getViewState().observe(this, Observer<S> {
+        model.getViewState().observe(this, Observer<S> {
             it ?: return@Observer
             it.error?.let {
                 renderError(it)
@@ -33,7 +33,7 @@ abstract class BaseActivity<T, S : BaseViewState<T>> : AppCompatActivity(){
         })
     }
 
-    protected fun renderError(error: Throwable) = error?.let {
+    private fun renderError(error: Throwable) = error?.let {
         when (error){
             is NoAuthException -> startLogin()
             else -> it.message?.let { message -> showError(message) }
@@ -58,7 +58,7 @@ abstract class BaseActivity<T, S : BaseViewState<T>> : AppCompatActivity(){
 
     abstract fun renderData(data: T)
 
-    protected fun showError(message: String) = Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    private fun showError(message: String) = Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
     @SuppressLint("MissingSuperCall")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

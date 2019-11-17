@@ -1,13 +1,11 @@
 package ru.geekbrains.gb_kotlin.ui.splash
 
-import androidx.lifecycle.ViewModelProviders
+import org.koin.android.viewmodel.ext.android.viewModel
 import ru.geekbrains.gb_kotlin.ui.base.BaseActivity
 import ru.geekbrains.gb_kotlin.ui.main.MainActivity
 
 class SplashActivity : BaseActivity<Boolean?, SplashViewState>() {
-    override val viewModel by lazy {
-        ViewModelProviders.of(this).get(SplashViewModel::class.java)
-    }
+    override val model: SplashViewModel by viewModel()
 
     override val layoutRes: Int? = null
 
@@ -19,7 +17,7 @@ class SplashActivity : BaseActivity<Boolean?, SplashViewState>() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.requestUser()
+        model.requestUser()
     }
 
 }
