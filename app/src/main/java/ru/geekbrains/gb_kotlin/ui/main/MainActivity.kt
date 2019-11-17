@@ -1,17 +1,29 @@
 package ru.geekbrains.gb_kotlin.ui.main
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
+import com.firebase.ui.auth.AuthUI
 
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.geekbrains.gb_kotlin.R
 import ru.geekbrains.gb_kotlin.data.entity.Note
 import ru.geekbrains.gb_kotlin.ui.base.BaseActivity
 import ru.geekbrains.gb_kotlin.ui.note.NoteActivity
+import ru.geekbrains.gb_kotlin.ui.splash.SplashActivity
 
-class MainActivity : BaseActivity<List<Note>?, MainViewState>() {
+class MainActivity : BaseActivity<List<Note>?, MainViewState>(), LogoutDialog.LogoutListener {
+    companion object{
 
+        fun start(context: Context) = Intent(context, MainActivity::class.java).run{
+                context.startActivity(this)
+        }
+    }
     private lateinit var adapter: NotesRVAdapter
 
     override val viewModel: MainViewModel by lazy {
@@ -39,5 +51,24 @@ class MainActivity : BaseActivity<List<Note>?, MainViewState>() {
         data?.let {
             adapter.notes = it
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?) = MenuInflater(this).inflate(R.menu.main, menu).let { true }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when(item.itemId){
+        R.id.logout -> showLogoutDialog().let { true }
+        else -> false
+    }
+
+    private fun showLogoutDialog(){
+        supportFragmentManager.findFragmentByTag(LogoutDialog.TAG) ?: LogoutDialog.createInstance().show(supportFragmentManager, LogoutDialog.TAG)
+
+    }
+
+    override fun onLogout() {
+        AuthUI.getInstance()
+            .signOut(this)
+            .addOnSuccessListener { Intent(this, SplashActivity::class.java)
+            finish()}
     }
 }
