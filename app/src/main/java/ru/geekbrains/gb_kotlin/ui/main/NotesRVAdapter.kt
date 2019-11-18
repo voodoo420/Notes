@@ -4,7 +4,9 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.ScrollingTabContainerView
 import androidx.core.content.ContextCompat
+import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_note.view.*
 import ru.geekbrains.gb_kotlin.R
 import ru.geekbrains.gb_kotlin.common.format
@@ -22,7 +24,7 @@ class NotesRVAdapter(val onItemClick: ((Note) -> Unit)? = null) : RecyclerView.A
     override fun getItemCount() = notes.size
     override fun onBindViewHolder(vh: ViewHolder, pos: Int) = vh.bind(notes[pos])
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
         fun bind(note: Note) = with(itemView) {
             tv_title.text = note.title
@@ -36,7 +38,7 @@ class NotesRVAdapter(val onItemClick: ((Note) -> Unit)? = null) : RecyclerView.A
                 Note.Color.VIOLET -> R.color.violet
 
             }
-            tv_date.text = note?.lastChanged?.format("dd.MM.yy HH:mm")
+          //  tv_date.text = note?.lastChanged?.format("dd.MM.yy HH:mm")
             setBackgroundColor(ContextCompat.getColor(itemView.context, color))
             itemView.setOnClickListener{
                 onItemClick?.invoke(note)

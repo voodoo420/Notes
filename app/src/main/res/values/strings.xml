@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">gb_kotlin</string>
     <string name="new_note">New note</string>
+    <string name="note_delete_message">deleting</string>
+    <string name="note_delete_cancel">cancel</string>
+    <string name="note_delete_ok">delete</string>
+    <string name="logout_dialog_title">logout</string>
+    <string name="logout_dialog_message">logout</string>
+    <string name="logout_dialog_ok">ok</string>
+    <string name="logout_dialog_cancel">cancel</string>
 </resources>
