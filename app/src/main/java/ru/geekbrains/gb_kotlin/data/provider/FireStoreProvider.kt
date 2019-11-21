@@ -2,8 +2,10 @@ package ru.geekbrains.gb_kotlin.data.provider
 
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
+import com.google.firebase.firestore.QuerySnapshot
 import ru.geekbrains.gb_kotlin.data.entity.Note
 import ru.geekbrains.gb_kotlin.data.entity.User
 import ru.geekbrains.gb_kotlin.data.errors.NoAuthException
@@ -33,10 +35,13 @@ class FireStoreProvider(private val firebaseAuth: FirebaseAuth, private val stor
         try {
             getUserNotesCollection().addSnapshotListener{ snapshot, e ->
                 e?.let { value = NoteResult.Error(it) } ?: let {
-                    snapshot?.let { val notes = mutableListOf<Note>()
-                    for (doc: QueryDocumentSnapshot in snapshot) {
-                        notes.add(doc.toObject(Note::class.java))
-                    }
+                    snapshot?.let {
+                       // val notes = mutableListOf<Note>()
+                        val notes = it.documents.map { it.toObject(Note::class.java) }
+
+/*                        for (doc: QueryDocumentSnapshot in snapshot) {
+                            notes.add(doc.toObject(Note::class.java))
+                        }*/
                         value = NoteResult.Success(notes)
                     }
                 }
