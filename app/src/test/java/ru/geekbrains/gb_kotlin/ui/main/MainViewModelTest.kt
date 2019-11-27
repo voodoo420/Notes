@@ -1,3 +1,4 @@
+/*
 package ru.geekbrains.gb_kotlin.ui.main
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -63,4 +64,4 @@ class MainViewModelTest{
         assertFalse(notesLiveData.hasObservers())
     }
 
-}
+}*/

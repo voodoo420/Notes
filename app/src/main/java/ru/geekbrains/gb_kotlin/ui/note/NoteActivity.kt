@@ -3,7 +3,6 @@ package ru.geekbrains.gb_kotlin.ui.note
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.provider.Settings.System.DATE_FORMAT
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
@@ -19,7 +18,7 @@ import ru.geekbrains.gb_kotlin.data.entity.Note
 import ru.geekbrains.gb_kotlin.ui.base.BaseActivity
 import java.util.*
 
-class NoteActivity: BaseActivity<NoteViewState.Data, NoteViewState>() {
+class NoteActivity: BaseActivity<NoteData>() {
 
     companion object{
         private val EXTRA_NOTE = NoteActivity::class.java.name + "extra.note"
@@ -60,7 +59,7 @@ class NoteActivity: BaseActivity<NoteViewState.Data, NoteViewState>() {
         initView()
     }
 
-    override fun renderData(data: NoteViewState.Data) {
+    override fun renderData(data: NoteData) {
         if (data.isDeleted) {
             finish()
             return

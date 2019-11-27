@@ -1,3 +1,4 @@
+/*
 package ru.geekbrains.gb_kotlin.data.provider
 
 
@@ -130,4 +131,4 @@ class FireStoreProviderTest {
         assertEquals(testNotes[0], result)
     }
 
-}
+}*/

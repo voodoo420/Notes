@@ -38,7 +38,7 @@ class NotesRVAdapter(val onItemClick: ((Note) -> Unit)? = null) : RecyclerView.A
                 Note.Color.VIOLET -> R.color.violet
 
             }
-          //  tv_date.text = note?.lastChanged?.format("dd.MM.yy HH:mm")
+            tv_date.text = note?.lastChanged?.format("dd.MM.yy HH:mm")
             setBackgroundColor(ContextCompat.getColor(itemView.context, color))
             itemView.setOnClickListener{
                 onItemClick?.invoke(note)
