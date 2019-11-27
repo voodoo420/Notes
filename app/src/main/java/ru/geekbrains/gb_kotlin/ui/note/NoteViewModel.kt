@@ -1,5 +1,6 @@
 package ru.geekbrains.gb_kotlin.ui.note
 
+import androidx.annotation.VisibleForTesting
 import ru.geekbrains.gb_kotlin.data.NotesRepository
 import ru.geekbrains.gb_kotlin.data.entity.Note
 import ru.geekbrains.gb_kotlin.data.model.NoteResult
@@ -14,7 +15,8 @@ class NoteViewModel(private val notesRepository: NotesRepository) : BaseViewMode
         viewStateLiveData.value = NoteViewState(NoteViewState.Data(note = note))
     }
 
-    override fun onCleared() {
+    @VisibleForTesting
+    public override fun onCleared() {
         pendingNote?.let {
             notesRepository.saveNote(it)
         }
